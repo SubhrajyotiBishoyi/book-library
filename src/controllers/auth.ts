@@ -2,7 +2,6 @@ import { User } from "../entity/Users";
 import { getManager } from "typeorm";
 import { Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
-import * as cookie from "cookie-parser";
 const SECRET_Key = "b00k$l!br@ry";
 
 export class Auth {
@@ -14,7 +13,8 @@ export class Auth {
             email: req.body.email,
             password: req.body.password,
             phoneNo: req.body.phoneNo,
-            photo: req.body.photo
+            photo: req.body.photo,
+            isAdmin: req.body.isAdmin
         });
         await userRepository.save(user);
         res.json({
@@ -34,7 +34,7 @@ export class Auth {
 
     async loginUser(req: Request, res: Response) {
         const userRepository = getManager().getRepository(User);
-        if (!req.body.email || !req.body.password) {
+        if (!req.body.username || !req.body.password) {
             return res.status(400).send({
                 success: false,
                 message: 'The email and password is required.'
@@ -42,28 +42,21 @@ export class Auth {
         }
         
         try {
-            const user = await userRepository.findOne({ email: req.body.email});
-            const password = await userRepository.findOne({ password: req.body.password});
-            if(!user) {
-                return res.status(400).send({
-                    success: false,
-                    message: 'The user does not exist.'
-                });
-            }
-            if(!password){
+            const user = await userRepository.findOne({ email: req.body.username});
+            if(user.password != req.body.password){
                 return res.status(400).send({
                     success: false,
                     message: 'The email and password is not correct.'
                 });
             }
             const payload = {
-                email: req.body.email
+                email: req.body.username
             }
             const token = jwt.sign(payload, SECRET_Key, {expiresIn: 100000000});
-            res.cookie('token', token);
             return res.status(400).send({
                 success: true,
-                message: 'Login was successful.'
+                message: 'Login was successful.',
+                token: token
             });
         }
         catch(e) {

@@ -24,4 +24,7 @@ export class User {
     @Column()
     photo: string;
 
+    @Column()
+    isAdmin: boolean;
+
 }
