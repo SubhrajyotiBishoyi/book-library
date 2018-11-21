@@ -1,4 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
+import { Registry } from "./Registry";
 
 @Entity()
 export class User {
@@ -26,5 +27,8 @@ export class User {
 
     @Column()
     isAdmin: boolean;
+
+    @ManyToOne(type => Registry, registry => registry.users)
+    registry: Registry;
 
 }

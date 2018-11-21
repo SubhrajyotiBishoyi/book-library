@@ -13,7 +13,7 @@ export class Auth {
             email: req.body.email,
             password: req.body.password,
             phoneNo: req.body.phoneNo,
-            photo: req.body.photo,
+            photo: req.file.path,
             isAdmin: req.body.isAdmin
         });
         await userRepository.save(user);
@@ -50,13 +50,15 @@ export class Auth {
                 });
             }
             const payload = {
-                email: req.body.username
+                email: req.body.username,
+                id: user.id,
             }
             const token = jwt.sign(payload, SECRET_Key, {expiresIn: 100000000});
             return res.status(400).send({
                 success: true,
                 message: 'Login was successful.',
-                token: token
+                token: token,
+                id: user.id
             });
         }
         catch(e) {

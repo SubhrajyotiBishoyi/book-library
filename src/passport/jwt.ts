@@ -6,9 +6,9 @@ import {getManager} from "typeorm";
 let options: any = {};
 options.jwtFromRequest = jwt.ExtractJwt.fromAuthHeaderAsBearerToken();
 options.secretOrKey = "b00k$l!br@ry";
-use(new jwt.Strategy(options,async function(Payload, done){
+use(new jwt.Strategy(options,async function(payload, done){
     const userRepo = getManager().getRepository(User);
-    const user = await userRepo.findOne(Payload.id);
+    const user = await userRepo.findOne(payload.id);
     if(!user) {
         return done(null, false, {message: 'The user does not exist.'});
     }
