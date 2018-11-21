@@ -1,5 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToMany,JoinTable} from "typeorm";
 import { Registry } from "./Registry";
+import {Book} from "./Books";
 
 @Entity()
 export class User {
@@ -28,7 +29,9 @@ export class User {
     @Column()
     isAdmin: boolean;
 
-    @ManyToOne(type => Registry, registry => registry.users)
-    registry: Registry;
-
+    @ManyToMany(type => Book, book => book.users)
+    @JoinTable({
+        name: "registry",
+    })
+    books: Book[];
 }

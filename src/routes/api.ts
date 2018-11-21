@@ -20,7 +20,6 @@ export class API {
         let router: express.Router = express.Router();
         router.post("/auth/signup", upload.single('photo'), auth.addUser);
         router.get("/auth/users", auth.getUsers);
-
         router.post("/auth/login", Middleware, auth.loginUser);
 
         router.post("/addBook", jwtMiddleware, book.addBook);
@@ -30,8 +29,8 @@ export class API {
         router.post("/books/:id/lend", jwtMiddleware, bookLend.bookLend);
         router.get("/books/owned/me", jwtMiddleware, bookLend.myBooks);
 
-        router.post("/addAuthor", author.addAuthor);
-        router.get("/authors", author.getAuthors);
+        router.post("/addAuthor", jwtMiddleware, author.addAuthor);
+        router.get("/authors", jwtMiddleware, author.getAuthors);
 
         return router;
     }

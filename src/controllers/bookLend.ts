@@ -1,6 +1,4 @@
 import { Registry } from "../entity/Registry";
-import { User } from "../entity/Users";
-import { Book } from "../entity/Books";
 import { getManager } from "typeorm";
 import {Books} from "../controllers/books";
 const book = new Books();
@@ -38,7 +36,7 @@ export class BookLend {
         if(!myBooks){
             return res.json({
                 status: false,
-                message: "No bok found"
+                message: "No book found"
             })
         }
         return res.json({

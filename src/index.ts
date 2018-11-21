@@ -2,10 +2,8 @@ import "reflect-metadata";
 import "typescript";
 import {createConnection} from "typeorm";
 import {API} from "./routes/api";
-import {Request, Response} from "express";
 import * as express from "express";
 import * as http from "http";
-import { User } from "./entity/Users";
 import * as bodyParser from "body-parser";
 
 const app = express();
