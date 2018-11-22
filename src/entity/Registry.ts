@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, JoinColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 import {Book} from "./Books";
 import { User } from "./Users";
 
@@ -8,10 +8,10 @@ export class Registry {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @JoinColumn()
+    @Column()
     userId: number;
 
-    @JoinColumn()
+    @Column()
     bookId: number;
 
     @Column()

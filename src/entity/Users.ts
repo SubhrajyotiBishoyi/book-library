@@ -31,7 +31,7 @@ export class User {
 
     @ManyToMany(type => Book, book => book.users)
     @JoinTable({
-        name: "registry",
+        name: ""
     })
     books: Book[];
 }

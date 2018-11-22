@@ -5,6 +5,7 @@ const book = new Books();
 
 export class BookLend {
     async bookLend(req, res, Payload) {
+        try{
         const registryRepo = getManager().getRepository(Registry);
         var date = new Date();
         date.setDate(date.getDate() + 7);
@@ -19,13 +20,20 @@ export class BookLend {
             lendDt: new Date(),
             returnDt: RtnDate
         })
-
         await registryRepo.save(bookLendInfo);
+
         book.updateOne(req, res);
         return res.json({
             status: true,
             response: bookLendInfo
         })
+    }
+    catch(e){
+        return res.json({
+            status: false,
+            error: e
+        })
+    }
     }
 
     async myBooks(req, res) {
