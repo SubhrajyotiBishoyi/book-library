@@ -15,11 +15,12 @@ export class BookLend {
         var RtnDate = mm + '/' + dd + '/' + y;
 
         const bookLendInfo = registryRepo.create({
-            userId: req.user.id,
-            bookId: req.params.id,
             lendDt: new Date(),
-            returnDt: RtnDate
+            returnDt: RtnDate,
+            userId: req.user.id,
+            bookId: req.params.id
         })
+    
         await registryRepo.save(bookLendInfo);
 
         book.updateOne(req, res);

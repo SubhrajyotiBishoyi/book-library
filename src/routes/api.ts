@@ -13,14 +13,36 @@ const auth = new Auth();
 const book = new Books();
 const author = new Authors();
 const bookLend = new BookLend();
-const upload = multer({dest: 'uploads/photos'});
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, "uploads/photos");
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.fieldname + new Date().toISOString());
+    }
+   });
+
+const fileFilter = (req, file, cb) => {
+    if(file.mimetype == "image/jpeg" || file.mimetype == "image/png") {
+        cb(null, true);
+    }
+    else{
+        cb(null, false);
+    }
+};   
+const upload = multer({
+        storage: storage,
+        limits: {fileSize: 1024 * 1024},
+        fileFilter: fileFilter
+    });
 
 export class API {
     static getRoutes() {
         let router: express.Router = express.Router();
         router.post("/auth/signup", upload.single('photo'), auth.addUser);
         router.get("/auth/users", auth.getUsers);
-        router.post("/auth/login", Middleware, auth.loginUser);
+        router.post("/auth/login", auth.loginUser);
+        router.put("/auth/me", upload.single('photo'), jwtMiddleware, auth.updateAuth);
 
         router.post("/addBook", jwtMiddleware, book.addBook);
         router.get("/books", jwtMiddleware, book.getBooks);

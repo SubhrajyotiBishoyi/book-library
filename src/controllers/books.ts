@@ -1,16 +1,25 @@
 import { Book } from "../entity/Books";
+import {Author} from  "../entity/Authors";
 import { getManager } from "typeorm";
 
 export class Books {
     async addBook(req, res) {
         const bookRepository = getManager().getRepository(Book);
+        const authorRepository = getManager().getRepository(Author);
+
         const book = bookRepository.create({
             name: req.body.name,
             description: req.body.description,
             authorName: req.body.authorName,
             availability: req.body.availability
         })
+
         await bookRepository.save(book);
+
+        const author = new Author();
+        book.authors = [author];
+        await bookRepository.save(book);
+        
         return res.json({
             status: true,
             response: book
@@ -30,7 +39,7 @@ export class Books {
 
     async getBookBtId(req, res) {
         const bookRepository = getManager().getRepository(Book);
-        const book = await bookRepository.findOne(req.params.id);
+        const book = await bookRepository.findOne(req.params.id,{relations: ["authors"]});
         if (!book) {
             return res.json({
                 status: false,

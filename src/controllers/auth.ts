@@ -65,4 +65,21 @@ export class Auth {
             console.log(e)
         }
     }
+
+    async updateAuth(req: Request, res: Response){
+        const userRepository = getManager().getRepository(User);
+                await userRepository.update(req.user.id, {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+                password: req.body.password,
+                phoneNo: req.body.phoneNo,
+                photo: req.file.path,
+                isAdmin: req.body.isAdmin
+            });
+            return res.json({
+                status: true,
+                response: "User Updated successfully!"
+            });     
+    }
 }
